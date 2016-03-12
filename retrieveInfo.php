@@ -16,13 +16,14 @@
 	<body>
 	<div class="text-right">
 		<a href="logout.php" class="btn btn-danger" role="button">Logout</a>
+		<a href="bidding.php" class= "btn btn-primary" role="button">Bidding Page</a>"
 	</div>
 	<?php 
 			include_once 'includes/dbconnect.php';
 			$dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
 
-
 	        $query = "SELECT type, itemid, feeflag, itemname, pickuplocation, returnlocation FROM item WHERE email = '{$_SESSION['email']}'"; 
+	        //$dbconn->prepare($query);
 	        $result = pg_query($query); 
 			$i = 0;
 			echo '
