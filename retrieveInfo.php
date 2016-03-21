@@ -14,10 +14,6 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-	<div class="text-right">
-		<a href="logout.php" class="btn btn-danger" role="button">Logout</a>
-		<a href="bidding.php" class= "btn btn-primary" role="button">Bidding Page</a>"
-	</div>
 	<?php 
 			include_once 'includes/dbconnect.php';
 			$dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
@@ -73,7 +69,6 @@
 			pg_free_result($result);
 				echo '</tbody></table>';
 	?>
-
 	<div class="clearfix"></div>
 	<ul class="pagination pull-right">
 	  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
@@ -84,6 +79,10 @@
 	  <li><a href="#">5</a></li>
 	  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 	</ul>
+	<div class="text-left">
+		<a href="logout.php" class="btn btn-danger" role="button">Logout</a>
+		<a href="bidding.php" class= "btn btn-primary" role="button">Bidding Page</a>
+	</div>
 	                
 	<!-- Edit Button in Prompt -->
 	<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
