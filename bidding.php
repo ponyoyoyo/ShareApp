@@ -174,6 +174,7 @@
 				<div class="text-left">
 					<p>	
 						<a href="retrieveinfo.php" class="btn btn-primary" role="button">Your Shared Items</a>
+						<a href="borrowed.php" class="btn btn-primary" role="button">Your Borrowed Items</a>
 						<a href="logout.php" class="btn btn-danger" role="button">Logout</a>
 					</p>
 				</div>

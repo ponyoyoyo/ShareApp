@@ -18,7 +18,7 @@
 			include_once 'includes/dbconnect.php';
 			$dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
 
-	        $query = "SELECT type, itemid, feeflag, itemname, pickuplocation, returnlocation FROM item WHERE email = '{$_SESSION['email']}'"; 
+	        $query = "SELECT i.type, i.itemid, i.feeflag, m.name,  i.itemname, pickuplocation, returnlocation FROM item i, loan l, member m WHERE i.email = '{$_SESSION['email']}' AND l.borrower = m.email AND l.lender = i.email"; 
 	        //$dbconn->prepare($query);
 	        $result = pg_query($query); 
 			$i = 0;
@@ -28,7 +28,7 @@
 			<div class="container">
 			<div class="row">  
 	        <div class="col-md-12">
-	        <h4>Your Items</h4>
+	        <h4>Your Shared Items</h4>
 	        <div class="table-responsive">
 
 	                
@@ -40,6 +40,7 @@
 	                   <th>Type</th>
 	                   <th>Item ID</th>
 	                   <th>Fee</th>
+	                   <th>Borrower Name</th>
 	                   <th>Item Name</th>
 	                   <th>Pick Up Location</th>
 	                   <th>Return Location</th>
