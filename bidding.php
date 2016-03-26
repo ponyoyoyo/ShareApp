@@ -7,30 +7,50 @@
 		<link rel="stylesheet" type="text/css" href="css/biddingpage.css">
 	</header>
 	<body>
-		<div class="container">
-	<div class="row">
+		<?php 
+			include_once 'includes/dbconnect.php';
+			$dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
 
-		<section class="content">
-			<h1>Items up for bidding</h1>
-			<div class="col-md-8 col-md-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body">
+
+	        $queryappliances = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'appliances'"; 
+	        $querytools = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'tools'";
+	        $queryfurnitures = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'furnitures'";
+	        $querybooks = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'books'";
+
+	        $result_appliances = pg_query($queryappliances); 
+	        $result_tools = pg_query($querytools); 
+	        $result_furnitures = pg_query($queryfurnitures); 
+	        $result_books = pg_query($querybooks); 
+			$i = 0;
+
+			echo ' <div class="container">
+				   <div class="row">
+
+			       <section class="content">
+			       <h1>Items up for bidding</h1>
+			       <div class="col-md-8 col-md-offset-2">
+				   <div class="panel panel-default">
+					  <div class="panel-body">
 						<div class="pull-right">
 							<div class="btn-group">
 								<button type="button" class="btn btn-success btn-filter" data-target="tools">Tools</button>
-								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">Appliances</button>
-								<button type="button" class="btn btn-danger btn-filter" data-target="cancelado">Furniture</button>
+								<button type="button" class="btn btn-warning btn-filter" data-target="appliances">Appliances</button>
+								<button type="button" class="btn btn-danger btn-filter" data-target="furnitures">Furniture</button>
+								<button type="button" class="btn btn-primary btn-filter" data-target="books">Books</button>
 								<button type="button" class="btn btn-default btn-filter" data-target="all">All</button>
 							</div>
 						</div>
 						<div class="table-container">
-							<table class="table table-filter">
-								<tbody>
-									<tr data-status="tools">
+						<table class="table table-filter">
+						<tbody>';
+
+			//fetch all tools
+			$count = 0;
+			while ($row = pg_fetch_assoc($result_tools)) {
+				echo '<tr data-status="tools">
 										<td>
 											<div class="ckbox">
-												<input type="checkbox" id="checkbox1">
-												<label for="checkbox1"></label>
+												<input type="checkbox" id="checkbox">
 											</div>
 										</td>
 										<td>
@@ -42,23 +62,19 @@
 											<div class="media">
 												<a href="#" class="pull-left">
 													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-												</a>
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right tools">(Tools)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="pendiente">
+												</a>';	
+				echo '<div class="media-body"><span class="media-meta pull-right">'.$row["availabledate"].'</span>';
+				echo '<h4 class="title">'.$row["itemname"].'<span class="pull-right tools">(Tools)</span></h4>';
+				echo '<p class="summary">'.$row["description"].'</p></div></div></td></tr>';
+				$count++;
+			}
+			//fetch all appliances 
+			while ($row = pg_fetch_assoc($result_appliances)) {
+				echo '<tr data-status="appliances">
 										<td>
 											<div class="ckbox">
-												<input type="checkbox" id="checkbox3">
-												<label for="checkbox3"></label>
+												<input type="checkbox" id="checkbox">
+												
 											</div>
 										</td>
 										<td>
@@ -70,23 +86,20 @@
 											<div class="media">
 												<a href="#" class="pull-left">
 													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-												</a>
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right pendiente">(Pendiente)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="cancelado">
+												</a>';	
+				echo '<div class="media-body"><span class="media-meta pull-right">'.$row["availabledate"].'</span>';
+				echo '<h4 class="title">'.$row["itemname"].'<span class="pull-right appliances">(Appliances)</span></h4>';
+				echo '<p class="summary">'.$row["description"].'</p></div></div></td></tr>';
+				$count++;
+			}
+			
+			//fetch all furnitures
+			while ($row = pg_fetch_assoc($result_furnitures)) {
+				echo '<tr data-status="furnitures">
 										<td>
 											<div class="ckbox">
-												<input type="checkbox" id="checkbox2">
-												<label for="checkbox2"></label>
+												<input type="checkbox" id="checkbox">
+												
 											</div>
 										</td>
 										<td>
@@ -98,51 +111,19 @@
 											<div class="media">
 												<a href="#" class="pull-left">
 													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-												</a>
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right cancelado">(Cancelado)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="tools" class="selected">
+												</a>';	
+				echo '<div class="media-body"><span class="media-meta pull-right">'.$row["availabledate"].'</span>';
+				echo '<h4 class="title">'.$row["itemname"].'<span class="pull-right furnitures">(furnitures)</span></h4>';
+				echo '<p class="summary">'.$row["description"].'</p></div></div></td></tr>';
+				$count++;
+			}
+
+			//fetch all book
+			while ($row = pg_fetch_assoc($result_books)) {
+				echo '<tr data-status="books">
 										<td>
 											<div class="ckbox">
-												<input type="checkbox" id="checkbox4" checked>
-												<label for="checkbox4"></label>
-											</div>
-										</td>
-										<td>
-											<a href="javascript:;" class="star star-checked">
-												<i class="glyphicon glyphicon-star"></i>
-											</a>
-										</td>
-										<td>
-											<div class="media">
-												<a href="#" class="pull-left">
-													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-												</a>
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right tools">(Tools)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-									<tr data-status="pendiente">
-										<td>
-											<div class="ckbox">
-												<input type="checkbox" id="checkbox5">
-												<label for="checkbox5"></label>
+												<input type="checkbox" id="checkbox">
 											</div>
 										</td>
 										<td>
@@ -154,22 +135,17 @@
 											<div class="media">
 												<a href="#" class="pull-left">
 													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
-												</a>
-												<div class="media-body">
-													<span class="media-meta pull-right">Febrero 13, 2016</span>
-													<h4 class="title">
-														Lorem Impsum
-														<span class="pull-right pendiente">(Pendiente)</span>
-													</h4>
-													<p class="summary">Ut enim ad minim veniam, quis nostrud exercitation...</p>
-												</div>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
+												</a>';	
+				echo '<div class="media-body"><span class="media-meta pull-right">'.$row["availabledate"].'</span>';
+				echo '<h4 class="title">'.$row["itemname"].'<span class="pull-right books">(books)</span></h4>';
+				echo '<p class="summary">'.$row["description"].'</p></div></div></td></tr>';
+				$count++;
+			}
+			pg_free_result($result);
+				echo '</tbody></table>';
+		?>
+				</div>
+				</div>
 				</div>
 				<div class="text-left">
 					<p>	
@@ -180,10 +156,8 @@
 				</div>
 			</div>
 		</section>
-		
 	</div>
 </div>
-
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
