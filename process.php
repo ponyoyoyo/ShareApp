@@ -36,27 +36,41 @@ if(isset($_POST['register-submit'])) {
 	$contact = pg_escape_string($_POST['contact']);
 	
 	if($username == '') {
-		echo "<script>alert('Please enter a username')</script>";
-		exit();
+		echo '
+			<div class="alert alert-danger">
+				<strong>Please enter a username</strong>
+			</div>';
 	}
 	
 	if($email == '') {
-		echo "<script>alert('Please enter an email')</script>";
+		echo '
+			<div class="alert alert-danger">
+				<strong>Please enter an email</strong>
+			</div>';
 	}
 	
 	if($password == '') {
-		echo "<script>alert('Please enter a password')</script>";
+		echo '
+			<div class="alert alert-danger">
+				<strong>Please enter a password</strong>
+			</div>';
 	}
 	
 	if($confirmpassword == '') {
-		echo "<script>alert('Please confirm your password')</script>";
+		echo '
+			<div class="alert alert-danger">
+				<strong>Please confirm your password</strong>
+			</div>';
 	}
 	
 	$rquery = "Select * FROM member WHERE email='$email'";
 	$rresult = pg_query($rquery);
 	$rrst = pg_num_rows($rresult);
 	if ($rrst > 0) {
-		echo "<script>alert('The email you have entered is already in use.')</script>";
+		echo '
+			<div class="alert alert-danger">
+				<strong>The email is already in use</strong>
+			</div>';
 	}
 
 	if ($password == $confirmpassword) {
