@@ -22,7 +22,10 @@ if(isset($_POST['login-submit'])) {
    }
    else 
      //echo '<html><header><title></title></header>'
-     echo "Invalid User";
+     echo '
+			<div class="alert alert-danger">
+				<strong>Invalid User</strong>
+			</div>';
    	 //echo '<body><button type="button" class="btn btn-link" action="index.php">Return to Login</button></body></html>';
    pg_close($dbconn);
 }
