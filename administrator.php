@@ -28,7 +28,7 @@
 					<input class="form-control" id="email" type="text" name="email" placeholder="Email of User" value="">
 				</div>
 				<div class="form-group">
-					<input type="enter" name="user-enter" id="user-enter" class="form-control btn btn-success" value="Enter">
+					<input type="submit" name="user-enter" id="user-enter" class="form-control btn btn-success" value="Enter">
 				</div>
 			</form>
 			</div>'
