@@ -31,7 +31,7 @@
 						<th><input type="checkbox" id="checkall" /></th>
 						<th>Type</th>
 						<th>Item ID</th>
-						<th>Fee</th>
+						<th>FeeFlag</th>
 						<th>Item Name</th>
 						<th>Pick Up Location</th>
 						<th>Return Location</th>
@@ -43,23 +43,23 @@
 					<?php
 						$query = "SELECT type, id, fee, name, pickup, return, description FROM item";
 						$result = pg_query($query);
-						$i = 0;
 						while ($row = pg_fetch_assoc($result)) {
 							echo '<tr>';
 							echo '<td><input type="checkbox" class="checkthis" /></td>';
-							$count = count($row);
-							$y = 0;
-							while ($y < $count)
-							{
-								$c_row = current($row);
-								echo '<td>' . $c_row . '</td>';
-								next($row);
-								$y = $y + 1;
+							echo '<td>' . $row['type'] . '</td>';
+							echo '<td>' . $row['id'] . '</td>';
+							if (intval($row['fee']) == 1){
+								echo '<td>Yes</td>';
+							} else {
+								echo '<td>No</td>';
 							}
-							echo '<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+							echo '<td>' . $row['name'] . '</td>';
+							echo '<td>' . $row['pickup'] . '</td>';
+							echo '<td>' . $row['return'] . '</td>';
+							echo '<td>' . $row['description'] . '</td>';
+							echo '<td><p data-placement="top" data-toggle="tooltip" title="Edit"><a type="button" href="#edit' . $row['id'] . '" class="btn btn-primary btn-xs" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
 							<td><p data-placement="top" data-toggle="tooltip" title="Delete"><a type="button" href="#delete' . $row['id'] . '" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" ><span class="glyphicon glyphicon-trash"></span></button></p></td>';
 							echo '</tr>';
-							$i = $i + 1;
 						}
 						pg_free_result($result);
 					?>
@@ -143,7 +143,7 @@
 			$query = "SELECT * FROM item WHERE id = ". $id;
 			$result = pg_fetch_assoc(pg_query($query));
 			$type = trim($result['type']);
-			$fee = trim($result['fee']);
+			$fee = intval(trim($result['fee']));
 			$name = trim($result['name']);
 			$pickup = trim($result['pickup']);
 			$return = trim($result['return']);
@@ -204,16 +204,20 @@
 				        			</div>
 				        			
 				        			<div class="form-group">
-				        				<input type="date" name="availableDate" id="availableDate" tabindex="2" class="form-control" placeholder="Available Date dd/mm/yy" value="'. $date .'">       
+				        				<input type="date" name="availableDate" id="availableDate" tabindex="2" class="form-control" placeholder="Available Date dd/mm/yy" value="'. $date .'">
 				        			</div>
 				        			
 				        			<div class="form-group">
 				        				<input type="text" name="description" id="description" tabindex="2" class="form-control" placeholder="Description"value="' . $description . '">
 				        			</div>
 				        			
-				        			<div class="form-group">
-				        				<input type="text" name="fee" id="fee" tabindex="2" class="form-control" placeholder="Fee" value="' . $fee . '">
-				        			</div>
+				        			<div class="form-group">';
+				        				if ($fee == 1) {
+				        					echo '<input type="checkbox" class="" name="fee" id="fee" checked value="1"><label for="fee">Fee Flag</label>';
+				        				} else {
+				        					echo '<input type="checkbox" class="" name="fee" id="fee"><label for="fee">Fee Flag</label>';
+				        				}
+				        			echo '</div>
 				        			
 				        			<input type="hidden" name="id" id="id" value="' . $id . '">
 				      			</div>
