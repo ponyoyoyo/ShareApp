@@ -4,8 +4,17 @@ session_start();
 include_once 'includes/dbconnect.php';
 $dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
 
-if(isset($_SESSION['email']) != "") {
-	header("Location: retrieveinfo.php");
+
+if(!$_SESSION['email']) {
+	header("Location: index.php");
+}
+
+if(isset($_POST['delete-submit'])) {
+	$id = intval(pg_escape_string($_POST['id']));
+   	$query = "DELETE FROM item WHERE id = " . $id;
+    $result = pg_query($query);
+	header("Location: retrieveinfo.php"); 
+	pg_close($dbconn);
 }
 
 if(isset($_POST['login-submit'])) {

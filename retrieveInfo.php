@@ -57,7 +57,7 @@
 								$y = $y + 1;
 							}
 							echo '<td><form method="post" action="edit.php"><p data-placement="top" data-toggle="tooltip" title="Edit"><button name="edit" id="edit" value="' . $row['id'] . '" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></button></p></form></td>
-							<td><p data-placement="top" data-toggle="tooltip" title="Delete"><button type="submit" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>';
+							<td><p data-placement="top" data-toggle="tooltip" title="Delete"><a type="button" href="#delete' . $row['id'] . '" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" ><span class="glyphicon glyphicon-trash"></span></button></p></td>';
 							echo '</tr>';
 							$i = $i + 1;
 						}
@@ -177,26 +177,38 @@
 	    
 	    
 	<!-- Delete Button in Prompt -->    
-	<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-	      <div class="modal-dialog">
-	    		<div class="modal-content">
-	          		<div class="modal-header">
-	        			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-	        			<h4 class="modal-title custom_align" id="Heading">Delete this item entry</h4>
-	      			</div>
-	          	
-	          	<div class="modal-body">
-	       				<div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?</div>	       
-	      		</div>
-	        		<div class="modal-footer ">
-	        			<button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-	        			<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" action='retrieveinfo.php'></span> No</button>
-	      			</div>
-	        	</div>
-	    <!-- /.modal-content --> 
-	  		</div>
-	      <!-- /.modal-dialog --> 
-	</div>
+	<?php
+		$query = "SELECT id FROM item";
+		$result = pg_query($query);
+		$i = 0;
+		while ($row = pg_fetch_assoc($result)) {
+			$id = $row['id'];
+			echo '<div class="modal fade" id="delete' . $id . '" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+								<h4 class="modal-title custom_align" id="Heading">Delete this item entry</h4>
+							</div>
+
+							<div class="modal-body">
+								<div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?</div>
+							</div>
+							<div class="modal-footer ">
+								<form action="process.php" method="post">
+									<input type="hidden" name="id" id="id" value="' . $id . '">
+									<button type="submit" name="delete-submit" id="delete-submit" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+									<button type="button" name="no-delete-submit" id="no-delete-submit" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" action="retrieveinfo.php"></span> No</button>
+								</form>
+							</div>
+						</div>
+								<!-- /.modal-content --> 
+					</div>
+						<!-- /.modal-dialog --> 
+				</div>';
+			$i = $i + 1;
+		}
+	?>
 
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
