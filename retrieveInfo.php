@@ -56,7 +56,7 @@
 								next($row);
 								$y = $y + 1;
 							}
-							echo '<td><form method="post" action="edit.php"><p data-placement="top" data-toggle="tooltip" title="Edit"><button name="edit" id="edit" value="' . $row['id'] . '" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></button></p></form></td>
+							echo '<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
 							<td><p data-placement="top" data-toggle="tooltip" title="Delete"><a type="button" href="#delete' . $row['id'] . '" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" ><span class="glyphicon glyphicon-trash"></span></button></p></td>';
 							echo '</tr>';
 							$i = $i + 1;
@@ -134,46 +134,100 @@
 		<a href="logout.php" class="btn btn-danger" role="button">Logout</a>
 	</div>
 	                
-	<!-- Edit Button in Prompt -->
-	<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-	      <div></div>
-		  <div class="modal-dialog">
-	    		<div class="modal-content">
-	          		<div class="modal-header">
-	        			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-	        			<h4 class="modal-title custom_align" id="Heading">Edit Your Item Details</h4>
-	      			</div>
-	          		
-	          		<div class="modal-body">
-	          			<div class="form-group">
-	       					<input class="form-control " type="text" placeholder="Type">
-	        			</div>
-	        		
-	        			<div class="form-group">
-	        				<input class="form-control " type="text" placeholder="Fee">
-	        			</div>
-	        			
-	        			<div class="form-group">
-	        				<input class="form-control " type="text" placeholder="Item Name">
-	        			</div>
+	<?php
+		$query = "SELECT id FROM item";
+		$result = pg_query($query);
+		$i = 0;
+		while ($row = pg_fetch_assoc($result)) {
+			$id = $row['id'];
+			$query = "SELECT * FROM item WHERE id = ". $id;
+			$result = pg_fetch_assoc(pg_query($query));
+			$type = trim($result['type']);
+			$fee = trim($result['fee']);
+			$name = trim($result['name']);
+			$pickup = trim($result['pickup']);
+			$return = trim($result['return']);
+			$date = trim($result['date']);
+			$description = trim($result['description']);
+			echo '<!-- Edit Button in Prompt -->
+				<div class="modal fade" id="edit' . $id . '" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+				      <div></div>
+					  <div class="modal-dialog">
+				    		<div class="modal-content">
+				          		<div class="modal-header">
+				        			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+				        			<h4 class="modal-title custom_align" id="Heading">Edit Your Item Details</h4>
+				      			</div>
 
-	        			<div class="form-group">
-	        				<input class="form-control " type="text" placeholder="Pick Up Location">
-	        			</div>
-	        			
-	        			<div class="form-group">
-	        				<textarea rows="1" class="form-control" placeholder="Return Location"></textarea>        
-	        			</div>
-	      			</div>
-	          
-	          		<div class="modal-footer ">
-	        			<button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
-	      			</div>
-	        	</div>
-	    		<!-- /.modal-content --> 
-	  		</div>
-	      	<!-- /.modal-dialog --> 
-	</div>
+				          		<form action = "process.php" method="post" role="form" >
+				          		<div class="modal-body">
+				          			<div class="form-group">
+				          				<input class="form-control "type="text" name="name" id="name" tabindex="1" placeholder="Item name" value="' . $name . '">
+				        			</div>
+				        		
+				        			<div class="form-group">
+										<select class="form-control" name="type">';
+											if ($type == "furnitures"){
+											
+												echo '<option value="furnitures" selected>Furniture</option>
+												<option value="tools">Tools</option>
+												<option value="appliances">Appliances</option>
+												<option value="books">Books</option>';
+											} else if ($type == "tools"){
+											
+												echo '<option value="furnitures">Furniture</option>
+												<option value="tools" selected>Tools</option>
+												<option value="appliances">Appliances</option>
+												<option value="books">Books</option>';
+											} else if ($type == "appliances"){
+											
+												echo '<option value="furnitures">Furniture</option>
+												<option value="tools">Tools</option>
+												<option value="appliances" selected>Appliances</option>
+												<option value="books">Books</option>';
+											} else if ($type == "books"){
+											
+												echo '<option value="furnitures">Furniture</option>
+												<option value="tools">Tools</option>
+												<option value="appliances">Appliances</option>
+												<option value="books" selected>Books</option>';
+											}  
+										echo '</select>
+				        			</div>
+				        			
+				        			<div class="form-group">
+				        				<input type="text" name="pickup" id="pickup" tabindex="2" class="form-control" placeholder="Pick Up Location" value="' . $pickup .'">
+				        			</div>
+
+				        			<div class="form-group">
+				        				<input type="text" name="return" id="return" tabindex="2" class="form-control" placeholder="Return Location" value="' . $return . '">
+				        			</div>
+				        			
+				        			<div class="form-group">
+				        				<input type="date" name="availableDate" id="availableDate" tabindex="2" class="form-control" placeholder="Available Date dd/mm/yy" value="'. $date .'">       
+				        			</div>
+				        			
+				        			<div class="form-group">
+				        				<input type="text" name="description" id="description" tabindex="2" class="form-control" placeholder="Description"value="' . $description . '">
+				        			</div>
+				        			
+				        			<div class="form-group">
+				        				<input type="text" name="fee" id="fee" tabindex="2" class="form-control" placeholder="Fee" value="' . $fee . '">
+				        			</div>
+				        			
+				        			<input type="hidden" name="id" id="id" value="' . $id . '">
+				      			</div>
+				          
+								<div class="modal-footer ">
+									<button type="submit" name="edit-submit" id="edit-submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+								</div>
+				        	</div>
+				    		<!-- /.modal-content --> 
+				  		</div>
+				      	<!-- /.modal-dialog --> 
+				</div>';
+		}
+	?>
 	    
 	    
 	<!-- Delete Button in Prompt -->    
