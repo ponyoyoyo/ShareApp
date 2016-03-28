@@ -7,42 +7,50 @@
 		<link rel="stylesheet" type="text/css" href="css/biddingpage.css">
 	</header>
 	<body>
+		<div class="container">
+			<div class="row">
+				<section class="content">
+					<h1>Items up for bidding</h1>
+					<div class="col-md-8 col-md-offset-2">
+						<form id="search-form" action="bidding.php" method="post" role="form" style="display: block;">
+							<div class="btn-group">
+								<button name="tools" type="button" class="btn btn-default btn-filter" data-target="tools">Tools</button>
+								<button name="appliances" type="button" class="btn btn-default btn-filter" data-target="appliances">Appliances</button>
+								<button name="furnitures" type="button" class="btn btn-default btn-filter" data-target="furnitures">Furniture</button>
+								<button name="books" type="button" class="btn btn-default btn-filter" data-target="books">Books</button>
+								<button name="all" type="button" class="btn btn-default btn-filter" data-target="all">All</button>
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Search" name="search">
+									<div class="input-group-btn">
+										<button name="search-submit" id="search-submit" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+									</div>
+								</div>
+							</div>
+						</form>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="table-container">
+									<table class="table table-filter">
+										<tbody>
 		<?php 
 			include_once 'includes/dbconnect.php';
 			$dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
+			
+			$search = '';
+			if(isset($_POST['search-submit'])) {
+				$search = pg_escape_string($_POST['search']);
+			}
 
-
-	        $queryappliances = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'appliances'"; 
-	        $querytools = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'tools'";
-	        $queryfurnitures = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'furnitures'";
-	        $querybooks = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'books'";
+	        $queryappliances = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'appliances' and i.name LIKE '%" . $search . "%'"; 
+	        $querytools = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'tools' and i.name LIKE '%" . $search . "%'";
+	        $queryfurnitures = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'furnitures' and i.name LIKE '%" . $search . "%'";
+	        $querybooks = "SELECT i.itemname, i.availabledate, i.description FROM item i WHERE i.type = 'books' and i.name LIKE '%" . $search . "%'";
 
 	        $result_appliances = pg_query($queryappliances); 
 	        $result_tools = pg_query($querytools); 
 	        $result_furnitures = pg_query($queryfurnitures); 
 	        $result_books = pg_query($querybooks); 
 			$i = 0;
-
-			echo ' <div class="container">
-				   <div class="row">
-
-			       <section class="content">
-			       <h1>Items up for bidding</h1>
-			       <div class="col-md-8 col-md-offset-2">
-				   <div class="panel panel-default">
-					  <div class="panel-body">
-						<div class="pull-right">
-							<div class="btn-group">
-								<button type="button" class="btn btn-success btn-filter" data-target="tools">Tools</button>
-								<button type="button" class="btn btn-warning btn-filter" data-target="appliances">Appliances</button>
-								<button type="button" class="btn btn-danger btn-filter" data-target="furnitures">Furniture</button>
-								<button type="button" class="btn btn-primary btn-filter" data-target="books">Books</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">All</button>
-							</div>
-						</div>
-						<div class="table-container">
-						<table class="table table-filter">
-						<tbody>';
 
 			//fetch all tools
 			$count = 0;
