@@ -83,4 +83,19 @@ if(isset($_POST['register-submit'])) {
 	header("Location: retrieveinfo.php"); 
    	pg_close($dbconn);
 }
+if(isset($_POST['edit-submit'])) {
+	$type = pg_escape_string($_POST['type']);
+	$id = intval(pg_escape_string($_POST['id']));
+	$fee = pg_escape_string($_POST['fee']);
+	$name = pg_escape_string($_POST['name']);
+	$pickup = pg_escape_string($_POST['pickup']);
+	$return = pg_escape_string($_POST['return']);
+	$date = pg_escape_string($_POST['availableDate']);
+	$description = pg_escape_string($_POST['description']);
+	$email = $_SESSION['email'];
+   	$query = "UPDATE item SET type='$type', fee='$fee', name='$name', pickup='$pickup', return = '$return', date='$date', description='$description' WHERE id=" . $id . " AND email='$email'";
+    $result = pg_query($query);
+	header("Location: retrieveinfo.php"); 
+	pg_close($dbconn);
+}
 ?> 

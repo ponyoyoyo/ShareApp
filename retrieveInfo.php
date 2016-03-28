@@ -14,10 +14,58 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-	<?php 
+		<div class="container">
+		<div class="row">  
+		<div class="col-md-12">
+		<?php 
 			include_once 'includes/dbconnect.php';
 			$dbconn = pg_connect($connection) or die('Could not connect: ' . pg_last_error());
 
+			$user = current(pg_fetch_row(pg_query($dbconn, "SELECT name FROM member WHERE email = '{$_SESSION['email']}'")));
+			echo '<h1> Welcome ' . $user. '</h1>';
+		?>
+		<h4> Your Items </h4>
+	        <div class="table-responsive">
+				<table id="mytable" class="table table-bordred table-striped">
+					<thead>
+						<th><input type="checkbox" id="checkall" /></th>
+						<th>Type</th>
+						<th>Item ID</th>
+						<th>Fee</th>
+						<th>Item Name</th>
+						<th>Pick Up Location</th>
+						<th>Return Location</th>
+						<th>Description</th>
+						<th>Edit</th>
+						<th>Delete</th>
+					</thead>
+
+					<?php
+						$query = "SELECT type, id, fee, name, pickup, return, description FROM item";
+						$result = pg_query($query);
+						$i = 0;
+						while ($row = pg_fetch_assoc($result)) {
+							echo '<tr>';
+							echo '<td><input type="checkbox" class="checkthis" /></td>';
+							$count = count($row);
+							$y = 0;
+							while ($y < $count)
+							{
+								$c_row = current($row);
+								echo '<td>' . $c_row . '</td>';
+								next($row);
+								$y = $y + 1;
+							}
+							echo '<td><form method="post" action="edit.php"><p data-placement="top" data-toggle="tooltip" title="Edit"><button name="edit" id="edit" value="' . $row['id'] . '" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></button></p></form></td>
+							<td><p data-placement="top" data-toggle="tooltip" title="Delete"><button type="submit" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>';
+							echo '</tr>';
+							$i = $i + 1;
+						}
+						pg_free_result($result);
+					?>
+				</table>
+			</div>
+		<?php 
 	        $query = "SELECT i.type, i.itemid, i.feeflag, m.name,  i.itemname, pickuplocation, returnlocation FROM item i, loan l, member m WHERE i.email = '{$_SESSION['email']}' AND l.borrower = m.email AND l.lender = i.email"; 
 	        //$dbconn->prepare($query);
 	        $result = pg_query($query); 
