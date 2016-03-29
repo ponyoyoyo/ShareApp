@@ -292,23 +292,23 @@
 				          		<form action="process.php" method="post">
 					          		<div class="modal-body">
 					          			<div class="form-group">
-					       					<input class="form-control " type="text" placeholder="Type" readonly value="' . $type . '">
+					       					<input class="form-control " name="type" id="type" type="text" placeholder="Type" readonly value="' . $type . '">
 					        			</div>
 					        		
 					        			<div class="form-group">
-					        				<input class="form-control " type="text" placeholder="Fee" readonly value="' . $fee . '">
+					        				<input class="form-control " name="fee" id="fee" type="text" placeholder="Fee" readonly value="' . $fee . '">
 					        			</div>
 					        			
 					        			<div class="form-group">
-					        				<input class="form-control " type="text" placeholder="Item Name" readonly value="' . $name . '">
+					        				<input class="form-control " name="name" id="name" type="text" placeholder="Item Name" readonly value="' . $name . '">
 					        			</div>
 
 					        			<div class="form-group">
-					        				<input class="form-control " type="text" placeholder="Pick Up Location" value="' . $pickup . '">
+					        				<input class="form-control " name="pickup" id="pickup" type="text" placeholder="Pick Up Location" value="' . $pickup . '">
 					        			</div>
 					        			
 					        			<div class="form-group">
-					        				<input class="form-control " type="text" placeholder="Return Location" value="' . $return . '">  
+					        				<input class="form-control " name="return" id="return" type="text" placeholder="Return Location" value="' . $return . '">  
 					        			</div>
 					      			</div>
 					        		<input type="hidden" name="id" id="id" value="' . $id . '">
