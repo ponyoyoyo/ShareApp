@@ -137,20 +137,17 @@
 	                
 	<!-- Edit Button in Prompt for Your Items table-->    
 	<?php
-		$query = "SELECT id FROM item";
+		$query = "SELECT * FROM item";
 		$result = pg_query($query);
-		$i = 0;
 		while ($row = pg_fetch_assoc($result)) {
-			$id = $row['id'];
-			$query = "SELECT * FROM item WHERE id = ". $id;
-			$result = pg_fetch_assoc(pg_query($query));
-			$type = trim($result['type']);
-			$fee = intval(trim($result['fee']));
-			$name = trim($result['name']);
-			$pickup = trim($result['pickup']);
-			$return = trim($result['return']);
-			$date = trim($result['date']);
-			$description = trim($result['description']);
+			$id = intval($row['id']);
+			$type = trim($row['type']);
+			$fee = intval(trim($row['fee']));
+			$name = trim($row['name']);
+			$pickup = trim($row['pickup']);
+			$return = trim($row['return']);
+			$date = trim($row['date']);
+			$description = trim($row['description']);
 			echo '<!-- Edit Button in Prompt -->
 				<div class="modal fade" id="edit' . $id . '" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
 				      <div></div>
