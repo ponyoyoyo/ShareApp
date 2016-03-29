@@ -120,4 +120,14 @@ if(isset($_POST['edit-submit1'])) {
 	header("Location: retrieveinfo.php"); 
 	pg_close($dbconn);
 }
+
+if(isset($_POST['delete-submit1'])) {
+	$id = intval(pg_escape_string($_POST['id']));
+    $query = "DELETE FROM loan WHERE id=" . $id;
+    $result = pg_query($query);
+   	$query = "DELETE FROM item WHERE id = " . $id;
+    $result = pg_query($query);
+	header("Location: retrieveinfo.php"); 
+	pg_close($dbconn);
+}
 ?> 
