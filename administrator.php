@@ -37,7 +37,7 @@
 			$username = pg_escape_string($_POST['name']);
 			$email = pg_escape_string($_POST['email']);
 			$query = "SELECT name, email FROM member WHERE name='$username' AND email='$email'";
-			$result = pg_query($query);			
+			$result = pg_query($dbconn, $query);			
 		}
 		$i = 0;
 			echo '
