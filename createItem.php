@@ -78,33 +78,22 @@
 			$feeFlag = $_POST['fee'];
 			$itemDesc = $_POST['itemDesc'];
 			$itemImg = $_POST['imagefile'];
-			$itemID = mt_rand(0,0xffffff);
-			$today = getdate();
 			$pickUp = $_POST['pickUp'];
 			$retL = $_POST['retL'];
 		}
 		
+		$itemID = mt_rand();
+		$today = getdate();
+		
+		$cquery = "SELECT * FROM item WHERE itemID = '$itemID'";
+		
+		while (pg_query($dbconn, $cquery) != NULL)
+			$itemID = mt_rand();
+		
 		$query = 'INSERT INTO item (email, type, itemID, feeFlag, itemName, pickupLocation, returnLocation, availableDate, description, availabilityFlag)
 					VALUES ('{$_SESSION['email']}', '$itemType', '$itemID', '$feeFlag', '$itemName', '$pickUp', '$retL', '$today', '$itemDesc', 0)';
-		if (pg_result_status($query) = PGSQL_FATAL_ERROR) {
-			$qquery = "CREATE TABLE item (
-						email VARCHAR(64) REFERENCES member(email),
-						type CHAR(10) CHECK(type='tools' OR type='appliances' OR type='furnitures' OR type='books'),
-						itemID INT PRIMARY KEY,
-						feeFlag BIT NOT NULL,
-						itemName VARCHAR(256) NOT NULL,
-						pickupLocation VARCHAR(256) NOT NULL,
-						returnLocation VARCHAR(256) NOT NULL,
-						availableDate DATE NOT NULL,
-						description VARCHAR(256),
-						availablityFlag BIT NOT NULL
-						)";
-			pg_query($qquery);
-		}
-		else {
-			
-			while ()
-			pg_query($query);
+
+		pg_query($dbconn, $query);
 		}
 		
 	?>	
