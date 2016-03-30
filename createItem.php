@@ -3,7 +3,7 @@
 <?php
 	session_start();
 	
-	if (!$session['email']) {
+	if (!$_SESSION['email']) {
 		header("Location: index.php");
 	}
 ?>
@@ -57,6 +57,14 @@
 				<textarea name="itemDesc" id="itemDesc" form="createForm" maxlength="100" placeholder="No more than 100 characters"></textarea>
 			</div>
 			<div class="form-group">
+				<label>Pick-Up Point</label>
+				<input type="text" name="pickUp" id="pickUp" class="form-control" placeholder="Pick-Up Point" value="">
+			</div>
+			<div class="form-group">
+				<label>Return Location</label>
+				<input type="text" name="retL" id="retL" class="form-control" placeholder="Return Point" value="">
+			</div>
+			<div class="form-group">
 				<input type="file" name="imagefile" accept="image/*" id="imagefile">
 			</div>
 			<div class="form-group">
@@ -70,13 +78,33 @@
 			$feeFlag = $_POST['fee'];
 			$itemDesc = $_POST['itemDesc'];
 			$itemImg = $_POST['imagefile'];
-			
+			$itemID = mt_rand(0,0xffffff);
+			$today = getdate();
+			$pickUp = $_POST['pickUp'];
+			$retL = $_POST['retL'];
 		}
 		
 		$query = 'INSERT INTO item (email, type, itemID, feeFlag, itemName, pickupLocation, returnLocation, availableDate, description, availabilityFlag)
-					VALUES ()';
+					VALUES ('{$_SESSION['email']}', '$itemType', '$itemID', '$feeFlag', '$itemName', '$pickUp', '$retL', '$today', '$itemDesc', 0)';
 		if (pg_result_status($query) = PGSQL_FATAL_ERROR) {
+			$qquery = "CREATE TABLE item (
+						email VARCHAR(64) REFERENCES member(email),
+						type CHAR(10) CHECK(type='tools' OR type='appliances' OR type='furnitures' OR type='books'),
+						itemID INT PRIMARY KEY,
+						feeFlag BIT NOT NULL,
+						itemName VARCHAR(256) NOT NULL,
+						pickupLocation VARCHAR(256) NOT NULL,
+						returnLocation VARCHAR(256) NOT NULL,
+						availableDate DATE NOT NULL,
+						description VARCHAR(256),
+						availablityFlag BIT NOT NULL
+						)";
+			pg_query($qquery);
+		}
+		else {
 			
+			while ()
+			pg_query($query);
 		}
 		
 	?>	

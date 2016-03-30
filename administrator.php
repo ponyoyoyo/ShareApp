@@ -3,7 +3,7 @@
 <?php
 	session_start();
 	
-	if (!$session['email']) {
+	if (!$_SESSION['email']) {
 		header("Location: index.php");
 	}
 ?>
