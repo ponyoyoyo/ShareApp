@@ -90,9 +90,10 @@
 			<div class="well">
 			<?php
 			$query = "SELECT COUNT(*) FROM members WHERE adminflag = 0";
-			$result = pg_query($query);
+			$result = pg_query($dbconn, $query);
 			echo '<h3>USERS</h3>'
 			echo '<h2>' . $result . '</h2>';
+			pg_free_result($result);
 			?>
 			</div>
 		</div>
@@ -100,9 +101,10 @@
 			<div class="well">
 			<?php
 			$query = "SELECT COUNT(*) FROM item";
-			$result = pg_query($query);
+			$result = pg_query($dbconn, $query);
 			echo '<h3>Total Items</h3>'
 			echo '<h2>' . $result . '</h2>';
+			pg_free_result($result);
 			?>
 			</div>
 		</div>
@@ -113,6 +115,7 @@
 			$result = pg_query($query);
 			echo '<h3>Transactions</h3>'
 			echo '<h2>' . $result . '</h2>';
+			pg_free_result($result);
 			?>
 			</div>
 		</div>
