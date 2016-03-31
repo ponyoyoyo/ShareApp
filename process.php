@@ -46,6 +46,7 @@ if(isset($_POST['register-submit'])) {
 	$confirmpassword= pg_escape_string($_POST['confirm-password']);	
 	$address = pg_escape_string($_POST['address']);
 	$contact = pg_escape_string($_POST['contact']);
+	$adminflag = pg_escape_string($_POST['adminflag']);
 	
 	if($username == '') {
 		echo '
@@ -85,9 +86,12 @@ if(isset($_POST['register-submit'])) {
 			</div>';
 	}
 
-	if ($password == $confirmpassword) {
-		$result = pg_query("INSERT INTO member VALUES('$username', '$email', '$password', '$address', '$contact', '".$_POST['adminflag']."')");
+	if ($password == $confirmpassword && $adminflag == "1") {
+		$result = pg_query("INSERT INTO member VALUES('$username', '$email', '$password', '$address', '$contact', '1')");
 	} 
+	else {
+		$result = pg_query("INSERT INTO member VALUES('$username', '$email', '$password', '$address', '$contact', '0')");
+	}
 	
 	header("Location: retrieveinfo.php"); 
    	pg_close($dbconn);
